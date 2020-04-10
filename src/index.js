@@ -318,7 +318,8 @@ const Domitai = function (params) {
     },
     setMarketParams: (marketParams) => {
       this.marketParams = marketParams;
-    }
+    },
+    auth
   }
 };
 
