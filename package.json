@@ -1,0 +1,34 @@
+{
+  "name": "@domitai/domitai-sdk",
+  "version": "1.0.0",
+  "description": "Domitai SDK for using in node or browser apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "domitai",
+    "bitcoin"
+  ],
+  "author": "Mario Medina <sdk@domitai.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "async": "^3.2.0",
+    "bignumber.js": "^9.0.0",
+    "bluebird": "^3.7.2",
+    "debug": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "redis": "^3.0.2",
+    "socket.io-client": "^2.3.0",
+    "superagent": "^5.2.2",
+    "uuid": "^7.0.3",
+    "websocket": "^1.0.31"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.1",
+    "nodemon": "^2.0.3"
+  }
+}
