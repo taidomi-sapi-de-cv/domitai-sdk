@@ -298,9 +298,27 @@ const Domitai = function (params) {
         .then(res => res.body);
     },
     pos: {
-      create: ({ slug }) => {
-        return request.get(`${apiURL}/api/pos/${slug}`)
-          // .query({ book })
+      newPayment: ({ slug, currency = 'MXN', amount, customer_data = {}, generateQR = false }) => {
+        return request.post(`${apiURL}/api/pos`)
+          .send({ slug })
+          .then(res => res.body);
+      },
+      getPayment: (oid, generateQR = false) => {
+        return request.get(`${apiURL}/api/pos/${oid}`)
+          .query({ generateQR })
+          .then(res => res.body);
+      },
+      getPaymentStatus: (oid) => {
+        return request.get(`${apiURL}/api/pos/status/${oid}`)
+          .then(res => res.body);
+      },
+      getBySlug: (slug) => {
+        return request.get(`${apiURL}/api/pos/byslug/${slug}`)
+          .then(res => res.body);
+      },
+      setCustomerData: ({ oid, customer_data, merge = true }) => {
+        return request.post(`${apiURL}/api/pos/set_customer_data/${oid}`)
+          .send({ customer_data, merge })
           .then(res => res.body);
       }
     },
