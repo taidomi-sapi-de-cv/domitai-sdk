@@ -294,8 +294,8 @@ const Domitai = function (params) {
           socket.emit('api', { bearer, payload });
         });
       }
-      return request.get(`${apiURL}/api/ticker/`)
-        .query({ book })
+      return request.get(`${apiURL}/api/ticker/${book}`)
+        // .query({ book })
         .then(res => res.body);
     },
     setBuyAction: (fn, debounceTime = false) => {
