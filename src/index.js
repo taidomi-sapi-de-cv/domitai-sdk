@@ -295,8 +295,14 @@ const Domitai = function (params) {
         });
       }
       return request.get(`${apiURL}/api/ticker/${book}`)
-        // .query({ book })
         .then(res => res.body);
+    },
+    pos: {
+      create: ({ slug }) => {
+        return request.get(`${apiURL}/api/pos/${slug}`)
+          // .query({ book })
+          .then(res => res.body);
+      }
     },
     setBuyAction: (fn, debounceTime = false) => {
       setBuyFunction = debounce(fn, debounceTime === false ? process.env.DEBOUNCE_TIME : debounceTime, debounceTime === false);
