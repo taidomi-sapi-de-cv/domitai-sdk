@@ -300,7 +300,7 @@ const Domitai = function (params) {
     pos: {
       newPayment: ({ slug, currency = 'MXN', amount, customer_data = {}, generateQR = false }) => {
         return request.post(`${apiURL}/api/pos`)
-          .send({ slug })
+          .send({ slug, currency, amount, customer_data, generateQR })
           .then(res => res.body);
       },
       getPayment: (oid, generateQR = false) => {

@@ -1,6 +1,6 @@
 {
   "name": "@domitai/domitai-sdk",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Domitai SDK for using in node or browser apps",
   "main": "index.js",
   "scripts": {
