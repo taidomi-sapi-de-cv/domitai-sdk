@@ -1,3 +1,5 @@
 node_modules
 package-lock.json
 domitai-sdk.iml
+consocket.js
+.env

@@ -299,27 +299,106 @@ const Domitai = function (params) {
     },
     pos: {
       newPayment: ({ slug, currency = 'MXN', amount, customer_data = {}, generateQR = false }) => {
+        const body = { slug, currency, amount, customer_data, generateQR };
+        if (preferSocket) {
+          const nonce = Math.random().toString(36).replace('0.', '');
+          const payload = jwt.sign({ action: `pos/post`, nonce, payload: body }, nonce);
+          return new Promise((resolve) => {
+            const cb = (data) => {
+              socket.off(`pos_order`, cb);
+              resolve(data);
+            };
+            socket.on(`pos_order`, cb);
+            socket.emit(`api`, { payload });
+          });
+        }
         return request.post(`${apiURL}/api/pos`)
-          .send({ slug, currency, amount, customer_data, generateQR })
+          .send(body)
           .then(res => res.body);
       },
       getPayment: (oid, generateQR = false) => {
+        if (preferSocket) {
+          const nonce = Math.random().toString(36).replace('0.', '');
+          const payload = jwt.sign({ action: `pos/get/${oid}`, nonce }, nonce);
+          return new Promise((resolve) => {
+            const cb = (data) => {
+              socket.off(`pos_order`, cb);
+              resolve(data);
+            };
+            socket.on(`pos_order`, cb);
+            socket.emit(`api`, { payload });
+          });
+        }
         return request.get(`${apiURL}/api/pos/${oid}`)
           .query({ generateQR })
           .then(res => res.body);
       },
       getPaymentStatus: (oid) => {
+        if (preferSocket) {
+          const nonce = Math.random().toString(36).replace('0.', '');
+          const payload = jwt.sign({ action: `pos/status/${oid}`, nonce }, nonce);
+          return new Promise((resolve) => {
+            const cb = (data) => {
+              socket.off(`pos_order`, cb);
+              resolve(data);
+            };
+            socket.on(`pos_order`, cb);
+            socket.emit(`api`, { payload });
+          });
+        }
         return request.get(`${apiURL}/api/pos/status/${oid}`)
           .then(res => res.body);
       },
       getBySlug: (slug) => {
+        if (preferSocket) {
+          const nonce = Math.random().toString(36).replace('0.', '');
+          const payload = jwt.sign({ action: `pos/getBySlug/${slug}`, nonce }, nonce);
+          return new Promise((resolve) => {
+            const cb = (data) => {
+              socket.off(`pos`, cb);
+              resolve(data);
+            };
+            socket.on(`pos`, cb);
+            socket.emit(`api`, { payload });
+          });
+        }
         return request.get(`${apiURL}/api/pos/byslug/${slug}`)
           .then(res => res.body);
       },
       setCustomerData: ({ oid, customer_data, merge = true }) => {
+        const body = { customer_data, merge };
+        if (preferSocket) {
+          const nonce = Math.random().toString(36).replace('0.', '');
+          const payload = jwt.sign({ action: `pos/set_customer_data`, nonce, payload: body }, nonce);
+          return new Promise((resolve) => {
+            const cb = (data) => {
+              socket.off(`pos_order`, cb);
+              resolve(data);
+            };
+            socket.on(`pos_order`, cb);
+            socket.emit(`api`, { payload });
+          });
+        }
         return request.post(`${apiURL}/api/pos/set_customer_data/${oid}`)
-          .send({ customer_data, merge })
+          .send(body)
           .then(res => res.body);
+      },
+      listen: (oid) => {
+        return request.get(`${apiURL}/api/pos/listen/${oid}?socket_id=${socket.id}`)
+          .then(res => res.body);
+      },
+      mute: (oid) => {
+        return request.get(`${apiURL}/api/pos/mute/${oid}?socket_id=${socket.id}`)
+          .then(res => res.body);
+      },
+      wait: (oid) => {
+        return new Promise((resolve) => {
+          const cb = (data) => {
+            socket.off(`pos_web`, cb);
+            resolve(data);
+          };
+          socket.on(`pos_web`, cb);
+        });
       }
     },
     setBuyAction: (fn, debounceTime = false) => {
