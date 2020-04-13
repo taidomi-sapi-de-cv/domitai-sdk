@@ -136,7 +136,7 @@ const Domitai = function (params) {
         .send(body)
         .then(res => res.body);
     },
-    sell: (market, amount, rate, opts) => {
+    sell: (market, amount, rate, opts = {}) => {
       const { reserved_only = false, total, magic = 0 } = opts;
       if ((BC.BigNumber(amount).lte(0) && BC.BigNumber(total).lte(0)) || BC.BigNumber(rate).lte(0)) return Promise.reject(`sell: amount ${amount} ; ${total} o rate ${rate} incorrectos`);
       const body = {
