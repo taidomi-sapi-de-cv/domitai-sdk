@@ -401,6 +401,23 @@ const Domitai = function (params) {
         });
       }
     },
+    feeamounts: (symbol) => {
+      if (preferSocket && apiKey && apiSecret) {
+        const nonce = Math.random().toString(36).replace('0.', '');
+        const payload = jwt.sign({ action: 'withdrawals/feeamounts/' + symbol, nonce, api: true }, apiSecret);
+        const bearer = jwt.sign({ nonce, key: apiKey }, apiSecret);
+        return new Promise((resolve) => {
+          const cb = (data) => {
+            socket.off('withdrawals feeamounts', cb);
+            resolve(data);
+          };
+          socket.on('withdrawals feeamounts', cb);
+          socket.emit('api', { bearer, payload });
+        });
+      }
+      return request.get(`${apiURL}/api/withdrawals/feeamounts/${symbol}`)
+        .then(res => res.body);
+    },
     setBuyAction: (fn, debounceTime = false) => {
       setBuyFunction = debounce(fn, debounceTime === false ? process.env.DEBOUNCE_TIME : debounceTime, debounceTime === false);
     },
